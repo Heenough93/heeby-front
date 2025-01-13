@@ -1,6 +1,3 @@
-import React from "react";
-
-
 function App() {
   const heeby = `
               __              __
