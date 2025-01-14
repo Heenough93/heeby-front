@@ -16,13 +16,10 @@ const LoginModal: React.FC<Props> = ({closeLoginModal: closeLoginModal}: Props) 
 
   const handleLogin = async () => {
     try {
-      const data = await fetchWithLoading("/api/auth/login", {
+      const data = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/auth/login", {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password }),
-        mode: 'cors'
       });
       login(data);
       closeLoginModal();
