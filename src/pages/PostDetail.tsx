@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
-import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./PostDetail.css";
 
-const PostDetail = () => {
+const PostDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const { isAuthenticated } = useAuth();
-  const fetchWithLoading = useFetchWithLoading();
+  // const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const fetchPost = async (id) => {
+  const fetchPost = async (id: string) => {
     try {
       // const data = await fetchWithLoading("/api/post", {
       //   method: 'POST',
@@ -28,7 +28,7 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
-    fetchPost(id); // 컴포넌트가 렌더링되면 호출
+    id && fetchPost(id);
   }, [id]);
 
   const handleGoBack = () => {

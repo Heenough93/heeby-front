@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
-import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./Blog.css";
 
-const Blog = () => {
+interface Post {
+  id: number,
+  title: string,
+  dateAndTime: string,
+  content: string,
+}
+
+const Blog: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const fetchWithLoading = useFetchWithLoading();
-  const [posts, setPosts] = useState([]);
+  // const fetchWithLoading = useFetchWithLoading();
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const fetchPosts = async () => {
     try {

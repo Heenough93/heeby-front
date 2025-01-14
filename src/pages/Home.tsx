@@ -3,7 +3,7 @@ import {useAuth} from "../context/AuthContext.tsx";
 import LoginModal from "../components/LoginModal.tsx";
 import './Home.css';
 
-const Home = () => {
+const Home: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 

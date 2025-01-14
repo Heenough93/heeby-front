@@ -1,7 +1,7 @@
 import React from 'react';
 import './LoadingSpinner.css';
 
-const LoadingSpinner = () => {
+const LoadingSpinner: React.FC = () => {
   return (
       <div className="loading-overlay">
         <div className="spinner"></div>

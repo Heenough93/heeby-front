@@ -3,7 +3,11 @@ import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./LoginModal.css";
 
-const LoginModal = ({closeLoginModal: closeLoginModal}) => {
+interface Props {
+  closeLoginModal: () => void,
+}
+
+const LoginModal: React.FC<Props> = ({closeLoginModal: closeLoginModal}: Props) => {
   const { login } = useAuth();
   const fetchWithLoading = useFetchWithLoading();
 

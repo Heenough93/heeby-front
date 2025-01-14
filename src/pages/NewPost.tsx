@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
-import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./NewPost.css";
 
-const NewPost = () => {
+const NewPost: React.FC = () => {
   const navigate = useNavigate();
 
-  const fetchWithLoading = useFetchWithLoading();
+  // const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const savePost = async ({ title, content }) => {
+  const savePost = async () => {
     try {
       // const data = await fetchWithLoading("/api/create-post", {
       //   method: 'POST',
-      //   body: JSON.stringify({id: id}),
+      //   body: JSON.stringify({id: id, title: title, content: content }),
       // });
       const data = { id: 10 };
       alert(`Post saved successfully!: ${data.id}`);
@@ -28,7 +28,7 @@ const NewPost = () => {
   };
 
   const handleSave = async () => {
-    await savePost({ title, content });
+    await savePost();
   };
 
   return (
