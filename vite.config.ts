@@ -6,12 +6,6 @@ export default defineConfig({
   plugins: [react()],
   base: '',
   server: {
-    proxy: {
-      '/api': {
-        target: 'https://json-server-heenough93.koyeb.app',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''), // "/api"를 제거
-      },
-    },
-  },
+    port: 3000,
+  }
 })
