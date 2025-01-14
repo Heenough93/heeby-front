@@ -1,0 +1,122 @@
+/* Blog.css */
+.blog-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.blog-heading {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.blog-posts {
+    display: grid;
+    grid-template-columns: repeat(2, 400px);
+    gap: 16px;
+}
+
+.blog-post {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 200px; /* 고정 높이 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.blog-post:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-new-post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    height: 200px; /* 기존 포스트와 동일한 높이 */
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.add-new-post:hover {
+    background-color: #ffffff;
+    transform: translateY(-4px);
+}
+
+.add-post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.add-post-icon {
+    font-size: 3rem;
+    color: #333;
+}
+
+.post-title {
+    font-size: 1.8rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.5rem;
+}
+
+.post-date {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 1rem;
+    text-align: right;
+}
+
+.post-content {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 두 줄로 제한 */
+    -webkit-box-orient: vertical;
+}
+
+.post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 768px) {
+    .blog-container {
+        padding: 5px;
+    }
+
+    .blog-heading {
+        font-size: 2rem;
+    }
+
+    .blog-posts {
+        grid-template-columns: repeat(1, 350px);
+    }
+
+    .blog-post {
+        height: 150px;
+    }
+
+    .post-title {
+        font-size: 1.5rem;
+    }
+
+    .post-content {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,131 @@
+.post-detail-container {
+    padding: 20px; /* 내부 패딩 */
+    width: 800px; /* 100% 너비에서 좌우 padding을 제외 */
+    background-color: #fff; /* 흰색 배경 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    border-radius: 8px; /* 부드러운 모서리 */
+    margin-top: 20px; /* 헤더와 간격 추가 */
+}
+
+.header-with-back {
+    display: flex;
+    justify-content: space-between; /* 제목과 버튼을 양 끝으로 배치 */
+    align-items: center;
+    margin-bottom: 1.5rem; /* 헤더와 콘텐츠 사이 간격 */
+}
+
+.post-detail-heading {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.back-button {
+    background-color: #f0f0f0;  /* 부드러운 회색 배경색 */
+    color: #555;  /* 어두운 회색 텍스트 */
+    border: 1px solid #ccc;  /* 연한 회색 테두리 */
+    padding: 8px 12px; /* 버튼 크기 */
+    font-size: 0.9rem; /* 버튼 폰트 사이즈 */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* 호버 상태에 부드러운 전환 효과 */
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;  /* 호버 시 부드러운 회색으로 변화 */
+    border-color: #bbb;  /* 호버 시 테두리 색상 변화 */
+}
+
+.post-detail-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center; /* 중앙 정렬 */
+}
+
+.post-detail-input,
+.post-detail-textarea {
+    font-size: 1rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 780px;
+}
+
+.post-detail-textarea {
+    height: 150px;
+    resize: none;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center; /* 버튼을 수평 가운데 정렬 */
+    gap: 10px; /* 버튼 사이 간격 */
+}
+
+.action-button {
+    font-size: 1rem; /* 버튼 폰트 크기 */
+    padding: 10px 15px; /* 버튼 크기 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px; /* 부드러운 모서리 */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.update-button {
+    background-color: #f0f0f0;  /* 부드러운 회색 배경색 */
+    color: #555;  /* 어두운 회색 텍스트 */
+    border: 1px solid #ccc;  /* 연한 회색 테두리 */
+    padding: 8px 12px; /* 버튼 크기 */
+    font-size: 0.9rem; /* 버튼 폰트 사이즈 */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* 호버 상태에 부드러운 전환 효과 */
+}
+
+.update-button:hover {
+    background-color: #e0e0e0;  /* 호버 시 부드러운 회색으로 변화 */
+    border-color: #bbb;  /* 호버 시 테두리 색상 변화 */
+}
+
+.delete-button {
+    background-color: #737373;  /* 부드러운 회색 배경색 */
+    color: #ffffff;  /* 어두운 회색 텍스트 */
+    border: 1px solid #ccc;  /* 연한 회색 테두리 */
+    padding: 8px 12px; /* 버튼 크기 */
+    font-size: 0.9rem; /* 버튼 폰트 사이즈 */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* 호버 상태에 부드러운 전환 효과 */
+}
+
+.delete-button:hover {
+    background-color: #4d4d4d;  /* 호버 시 부드러운 회색으로 변화 */
+    border-color: #bbb;  /* 호버 시 테두리 색상 변화 */
+}
+
+@media (max-width: 768px) {
+    .post-detail-container {
+        width: 350px;
+    }
+
+    .post-detail-heading {
+        font-size: 1.6rem; /* 폰화면에서는 글씨 크기 줄임 */
+    }
+
+    .back-button {
+        font-size: 0.8rem; /* 버튼 폰트 크기 줄임 */
+        padding: 7px 10px; /* 버튼 크기 줄임 */
+    }
+
+    .post-detail-input,
+    .post-detail-textarea {
+        width: 330px;
+    }
+
+    .action-button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+}

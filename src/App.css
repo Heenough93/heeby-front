@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.nav-link {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+.nav-link.active {
+    color: #007bff;
+}
+
+.main {
+    flex: 1;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ascii-art {
+    display: flex;
+    justify-content: center;
+    font-family: monospace;
+    white-space: pre-wrap;
+    overflow-x: scroll;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: row; /* 세로 방향에서 가로 방향으로 변경 */
+        justify-content: center;
+    }
+
+    .nav-link {
+        margin: 0 1rem;
+        text-align: center;
+    }
+}

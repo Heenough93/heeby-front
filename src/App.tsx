@@ -1,20 +1,17 @@
-function App() {
-  const heeby = `
-              __              __
-             / /_  ___  ___  / /_  __  __
-            / __ \\/ _ \\/ _ \\/ __ \\/ / / /
-           / / / /  __/  __/ /_/ / /_/ /
-          /_/ /_/\\___/\\___/_.___/\\__, /
-                                /____/
-  `
+import React from "react";
+import {AuthProvider} from "./context/AuthContext.tsx";
+import {LoadingProvider} from "./context/LoadingContext.tsx";
+import MyApp from "./MyApp.tsx";
+import "./App.css";
 
+const App: React.FC = () => {
   return (
-    <>
-      <pre style={{"display": "flex", "justifyContent": "center"}}>
-        {heeby}
-      </pre>
-    </>
-  )
-}
+      <LoadingProvider>
+        <AuthProvider>
+          <MyApp />
+        </AuthProvider>
+      </LoadingProvider>
+  );
+};
 
-export default App
+export default App;
