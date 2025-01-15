@@ -1,31 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
-// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import {Post} from "../utils/models.ts";
 import "./Blog.css";
-
-interface Post {
-  id: number,
-  title: string,
-  dateAndTime: string,
-  content: string,
-}
 
 const Blog: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  // const fetchWithLoading = useFetchWithLoading();
+  const fetchWithLoading = useFetchWithLoading();
   const [posts, setPosts] = useState<Post[]>([]);
 
   const fetchPosts = async () => {
     try {
-      // const data = await fetchWithLoading("/api/posts");
-      const data = [
-        { id: 1, title: "First Blog", dateAndTime: "2024-12-29 17:29:30", content: "This is the first blog post." },
-        { id: 2, title: "Second Blog", dateAndTime: "2024-12-31 17:29:30", content: "This is the second blog post." },
-        { id: 3, title: "Third Blog", dateAndTime: "2025-01-03 17:29:30", content: "This is the third blog post." },
-        { id: 4, title: "Fourth BlogFourth BlogFourth BlogFourth BlogFourth BlogFourth Blog", dateAndTime: "2025-01-09 17:29:30", content: "This is the fourth blog post." },
-        { id: 5, title: "Fifth Blog", dateAndTime: "2025-01-12 17:29:30", content: "This is the fifth blog post.This is the fifth blog post.This is the fifth blog post.This is the fifth blog post.This is the fifth blog post." },
-      ];
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/find-posts", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = response.data;
       setPosts(data.reverse());
     } catch (error) {
       alert("Fail to fetch blog posts.");
@@ -52,7 +43,19 @@ const Blog: React.FC = () => {
                   <article key={post.id} className="blog-post">
                     <Link to={`/post/${post.id}`} className="post-link">
                       <h2 className="post-title">{post.title}</h2>
-                      <p className="post-date">{post.dateAndTime}</p>
+                      <p className="post-date">{
+                        new Date(post.dateAndTime).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: false,
+                          timeZone: "America/Los_Angeles",
+                          timeZoneName: "shortOffset",
+                        })
+                      }</p>
                       <p className="post-content">{post.content}</p>
                     </Link>
                   </article>

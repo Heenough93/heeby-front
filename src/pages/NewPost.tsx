@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
-// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./NewPost.css";
 
 const NewPost: React.FC = () => {
   const navigate = useNavigate();
 
-  // const fetchWithLoading = useFetchWithLoading();
+  const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const savePost = async () => {
     try {
-      // const data = await fetchWithLoading("/api/create-post", {
-      //   method: 'POST',
-      //   body: JSON.stringify({id: id, title: title, content: content }),
-      // });
-      const data = { id: 10 };
-      alert(`Post saved successfully!: ${data.id}`);
+      const post = {
+        id: "0",
+        dateAndTime: new Date().toISOString(),
+        title: title,
+        content: content,
+      }
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/register-post", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: post }),
+      });
+      const data = response.data;
+      alert(`${data}, Post saved successfully!`);
+      navigate(-1);
     } catch (error) {
       alert("Fail to save post");
     }

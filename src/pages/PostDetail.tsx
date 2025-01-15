@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
-// import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import "./PostDetail.css";
 
 const PostDetail: React.FC = () => {
@@ -9,17 +9,18 @@ const PostDetail: React.FC = () => {
   const { id } = useParams();
 
   const { isAuthenticated } = useAuth();
-  // const fetchWithLoading = useFetchWithLoading();
+  const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const fetchPost = async (id: string) => {
+  const fetchPost = async () => {
     try {
-      // const data = await fetchWithLoading("/api/post", {
-      //   method: 'POST',
-      //   body: JSON.stringify({id: id}),
-      // });
-      const data = {title: `Blog Post #${id}`, content: `This is the detailed content of blog post #${id}.`};
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/find-post-by-id", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: id }),
+      });
+      const data = response.data;
       setTitle(data.title);
       setContent(data.content);
     } catch (error) {
@@ -27,20 +28,55 @@ const PostDetail: React.FC = () => {
     }
   };
 
+  const updatePost = async () => {
+    try {
+      const post = {
+        id: id,
+        title: title,
+        content: content,
+      }
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/modify-post", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: post }),
+      });
+      const data = response.data;
+      alert(`${data}, Post updated successfully!`);
+      navigate(-1);
+    } catch (error) {
+      alert("Fail to update post");
+    }
+  };
+
+  const deletePost = async () => {
+    try {
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/remove-post", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: id }),
+      });
+      const data = response.data;
+      alert(`${data}, Post deleted successfully!`);
+      navigate(-1);
+    } catch (error) {
+      alert("Fail to delete post");
+    }
+  };
+
   useEffect(() => {
-    id && fetchPost(id);
+    fetchPost();
   }, [id]);
 
   const handleGoBack = () => {
     navigate(-1); // 이전 페이지로 돌아감
   };
 
-  const handleUpdate = () => {
-    alert(`Updated:${id}\nHeading: ${title}\nContent: ${content}`);
+  const handleUpdate = async () => {
+    await updatePost();
   };
 
-  const handleDelete = () => {
-    alert(`Delete post #${id}`);
+  const handleDelete = async () => {
+    await deletePost();
   };
 
   return (
