@@ -141,6 +141,7 @@ const NewPostMarker: React.FC<NewPostMarkerProps> = ({ onLocationSelect }) => {
 
       addCircle: function (e: L.LocationEvent) {
         return L.circle([ e.latlng.lat, e.latlng.lng ], e.accuracy / 2, {
+          radius: 10,
           className: 'circle-test',
           weight: 2,
           stroke: false,
