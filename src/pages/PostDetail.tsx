@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import PostDetailMapView from "../components/PostDetailMapView.tsx";
 import "./PostDetail.css";
 
 const PostDetail: React.FC = () => {
@@ -12,6 +13,11 @@ const PostDetail: React.FC = () => {
   const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleLocationSelect = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
 
   const fetchPost = async () => {
     try {
@@ -23,6 +29,7 @@ const PostDetail: React.FC = () => {
       const data = response.data;
       setTitle(data.title);
       setContent(data.content);
+      setLocation({ lat: data.lat, lng: data.lng })
     } catch (error) {
       alert("Fail to fetch post.");
     }
@@ -34,6 +41,8 @@ const PostDetail: React.FC = () => {
         id: id,
         title: title,
         content: content,
+        lat: location ? location.lat.toString() : "",
+        lng: location ? location.lng.toString() : "",
       }
       const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/modify-post", {
         method: 'POST',
@@ -94,15 +103,21 @@ const PostDetail: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="post-detail-input"
-              disabled={  !isAuthenticated}
+              disabled={!isAuthenticated}
           />
           <textarea
               placeholder="Enter content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="post-detail-textarea"
-              disabled={  !isAuthenticated}
+              disabled={!isAuthenticated}
           />
+          <h2>Location</h2>
+          {location && <PostDetailMapView
+              onLocationSelect={handleLocationSelect}
+              isAuthenticated={isAuthenticated}
+              location={location}
+          />}
           {isAuthenticated && (
               <div className="action-buttons">
                 <button type="button" onClick={handleUpdate} className="action-button update-button">

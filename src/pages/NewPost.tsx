@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import NewPostMapView from "../components/NewPostMapView.tsx";
 import "./NewPost.css";
 
 const NewPost: React.FC = () => {
@@ -9,6 +10,11 @@ const NewPost: React.FC = () => {
   const fetchWithLoading = useFetchWithLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleLocationSelect = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
 
   const savePost = async () => {
     try {
@@ -17,6 +23,8 @@ const NewPost: React.FC = () => {
         dateAndTime: new Date().toISOString(),
         title: title,
         content: content,
+        lat: location ? location.lat.toString() : "",
+        lng: location ? location.lng.toString() : "",
       }
       const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/register-post", {
         method: 'POST',
@@ -61,6 +69,8 @@ const NewPost: React.FC = () => {
               onChange={(e) => setContent(e.target.value)}
               className="new-post-textarea"
           />
+          <h2>Location</h2>
+          <NewPostMapView onLocationSelect={handleLocationSelect} />
           <button type="button" onClick={handleSave} className="action-button save-button">
             Save
           </button>
