@@ -44,7 +44,10 @@ const NewPost: React.FC = () => {
   };
 
   const handleSave = async () => {
-    await savePost();
+    const isConfirmed = window.confirm("Are you sure you want to save this post?");
+    if (isConfirmed) {
+      await savePost();
+    }
   };
 
   return (

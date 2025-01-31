@@ -81,11 +81,17 @@ const PostDetail: React.FC = () => {
   };
 
   const handleUpdate = async () => {
-    await updatePost();
+    const isConfirmed = window.confirm("Are you sure you want to update this post?");
+    if (isConfirmed) {
+      await updatePost();
+    }
   };
 
   const handleDelete = async () => {
-    await deletePost();
+    const isConfirmed = window.confirm("Are you sure you want to delete this post?");
+    if (isConfirmed) {
+      await deletePost();
+    }
   };
 
   return (
