@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
-import {Post} from "../utils/models.ts";
 import "./Blog.css";
 
 const Blog: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const fetchWithLoading = useFetchWithLoading();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
 
   const fetchPosts = async () => {
     try {
@@ -20,7 +19,7 @@ const Blog: React.FC = () => {
       if (isAuthenticated) {
         setPosts(data.reverse());
       } else {
-        setPosts(data.reverse().filter(post => post.isPublic === "true"));
+        setPosts(data.reverse().filter((post: any) => post.isPublic === "true"));
       }
     } catch (error) {
       alert("Fail to fetch blog posts.");
