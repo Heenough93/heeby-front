@@ -8,9 +8,14 @@ const NewPost: React.FC = () => {
   const navigate = useNavigate();
 
   const fetchWithLoading = useFetchWithLoading();
+  const [isPublic, setIsPublic] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleToggle = () => {
+    setIsPublic((prev) => !prev);
+  };
 
   const handleLocationSelect = (lat: number, lng: number) => {
     setLocation({ lat, lng });
@@ -21,6 +26,7 @@ const NewPost: React.FC = () => {
       const post = {
         id: "0",
         dateAndTime: new Date().toISOString(),
+        isPublic: isPublic,
         title: title,
         content: content,
         lat: location ? location.lat.toString() : "",
@@ -53,7 +59,15 @@ const NewPost: React.FC = () => {
   return (
       <div className="new-post-container">
         <div className="header-with-back">
-          <h1 className="new-post-heading">New Post</h1>
+          <div className="title-with-toggle">
+            <h1 className="new-post-heading">New Post</h1>
+            <label className="toggle-switch">
+              <input type="checkbox" checked={isPublic} onChange={handleToggle} />
+              <span className="slider"></span>
+              <span className="toggle-label">{isPublic ? "Public" : "Private"}</span>
+            </label>
+          </div>
+
           <button className="back-button" onClick={handleGoBack}>
             &larr; Back
           </button>

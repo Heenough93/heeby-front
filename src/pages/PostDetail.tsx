@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {useAuth} from "../context/AuthContext.tsx";
-import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import { useAuth } from "../context/AuthContext.tsx";
+import { useFetchWithLoading } from "../hooks/useFetchWithLoading.tsx";
 import PostDetailMapView from "../components/PostDetailMapView.tsx";
 import "./PostDetail.css";
 
@@ -11,9 +11,14 @@ const PostDetail: React.FC = () => {
 
   const { isAuthenticated } = useAuth();
   const fetchWithLoading = useFetchWithLoading();
+  const [isPublic, setIsPublic] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleToggle = () => {
+    setIsPublic((prev) => !prev);
+  };
 
   const handleLocationSelect = (lat: number, lng: number) => {
     setLocation({ lat, lng });
@@ -27,9 +32,10 @@ const PostDetail: React.FC = () => {
         body: JSON.stringify({ data: id }),
       });
       const data = response.data;
+      setIsPublic(data.isPublic  === "true");
       setTitle(data.title);
       setContent(data.content);
-      setLocation({ lat: data.lat, lng: data.lng })
+      setLocation({ lat: data.lat, lng: data.lng });
     } catch (error) {
       alert("Fail to fetch post.");
     }
@@ -39,11 +45,12 @@ const PostDetail: React.FC = () => {
     try {
       const post = {
         id: id,
+        isPublic: isPublic,
         title: title,
         content: content,
         lat: location ? location.lat.toString() : "",
         lng: location ? location.lng.toString() : "",
-      }
+      };
       const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/modify-post", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,7 +104,17 @@ const PostDetail: React.FC = () => {
   return (
       <div className="post-detail-container">
         <div className="header-with-back">
-          <h1 className="post-detail-heading">#{id} Post</h1>
+          <div className="title-with-toggle">
+            <h1 className="post-detail-heading">#{id} Post</h1>
+            {isAuthenticated && (
+                <label className="toggle-switch">
+                  <input type="checkbox" checked={isPublic} onChange={handleToggle} />
+                  <span className="slider"></span>
+                  <span className="toggle-label">{isPublic ? "Public" : "Private"}</span>
+                </label>
+            )}
+          </div>
+
           <button className="back-button" onClick={handleGoBack}>
             &larr; Back
           </button>

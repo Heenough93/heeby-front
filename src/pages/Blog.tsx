@@ -17,7 +17,11 @@ const Blog: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
       });
       const data = response.data;
-      setPosts(data.reverse());
+      if (isAuthenticated) {
+        setPosts(data.reverse());
+      } else {
+        setPosts(data.reverse().filter(post => post.isPublic === "true"));
+      }
     } catch (error) {
       alert("Fail to fetch blog posts.");
     }
