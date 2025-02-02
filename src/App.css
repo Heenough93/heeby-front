@@ -75,6 +75,33 @@ body {
     overflow-x: scroll;
 }
 
+.footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+.social-icons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    font-size: 24px;
+    color: #333;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #000;
+    transform: scale(1.2); /* 아이콘 크기 살짝 확대 */
+}
+
 @media (max-width: 768px) {
     .nav {
         flex-direction: row; /* 세로 방향에서 가로 방향으로 변경 */
