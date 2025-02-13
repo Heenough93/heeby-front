@@ -31,6 +31,9 @@ const MyApp: React.FC = () => {
               <NavLink to="/blog" className="nav-link">
                 Blog
               </NavLink>
+              <NavLink to="/track" className="nav-link">
+                Track
+              </NavLink>
             </nav>
           </header>
           <main className="main">
