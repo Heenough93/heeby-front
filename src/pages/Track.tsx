@@ -52,7 +52,10 @@ const Track: React.FC = () => {
           <div className="track-map">
             {tracks.length !== 0 && (
                 <MapContainer center={tracks[tracks.length - 1]} zoom={4} style={{ height: "400px", width: "100%" }}>
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  />
 
                   <Polyline positions={tracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
 
