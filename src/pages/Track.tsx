@@ -2,6 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker } from 'react-leaflet';
 import './Track.css';
+import L from "leaflet";
+
+const CustomIcon = L.icon({
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconAnchor: [12, 41], // 핀 끝 설정
+});
 
 const Track: React.FC = () => {
   const fetchWithLoading = useFetchWithLoading();
@@ -63,7 +70,7 @@ const Track: React.FC = () => {
                     if (index === tracks.length - 1) {
                       return (
                           <React.Fragment key={index}>
-                            <Marker position={[track.lat, track.lng]}>
+                            <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
                               <Popup>{track.location}</Popup>
                             </Marker>
                             <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
