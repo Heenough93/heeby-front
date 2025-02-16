@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker } from 'react-leaflet';
+import L, {LatLngExpression} from "leaflet";
+import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import './Track.css';
-import L from "leaflet";
 
 const CustomIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -12,7 +12,6 @@ const CustomIcon = L.icon({
 
 const Track: React.FC = () => {
   const fetchWithLoading = useFetchWithLoading();
-
   const [originalTracks, setOriginalTracks] = useState<any[]>([]);
   const [tracks, setTracks] = useState<any[]>([]);
   const [isAllTrack, setIsAllTrack] = useState(true);
@@ -50,6 +49,12 @@ const Track: React.FC = () => {
     setIsAllTrack(!isAllTrack);
   };
 
+  if (tracks.length === 0) return <p>Loading...</p>;
+
+  const lastTrack = tracks[tracks.length - 1];
+  const firstHalfTracks = tracks.filter(track => new Date(track.dateAndTime) < new Date("2025-01-29"));
+  const secondHalfTracks = tracks.filter(track => new Date(track.dateAndTime) >= new Date("2025-01-29"));
+
   return (
       <div className="track-container">
         <header className="track-header">
@@ -59,7 +64,7 @@ const Track: React.FC = () => {
         <div className="track-map-wrapper">
           <div className="header-with-toggle">
             <div className="title-with-toggle">
-              <h1 className="track-location">Current Location: {tracks.length === 0 ? "No data" : tracks[tracks.length - 1].location}</h1>
+              <h1 className="track-location">Current Location: {lastTrack.location}</h1>
             </div>
 
             <button className="track-toggle-button" onClick={toggleTrack}>
@@ -68,34 +73,38 @@ const Track: React.FC = () => {
           </div>
           <div className="track-map">
             {tracks.length !== 0 && (
-                <MapContainer center={tracks[tracks.length - 1]} zoom={4} style={{ height: "400px", width: "100%" }}>
+                <MapContainer center={[lastTrack.lat, lastTrack.lng] as LatLngExpression} zoom={4} style={{ height: "400px", width: "100%" }}>
                   <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   />
 
-                  <Polyline positions={tracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
+                  <Polyline positions={firstHalfTracks.map(track => [track.lat, track.lng])} color="red" weight={4} />
+                  {firstHalfTracks.map((track, index) => (
+                      <CircleMarker key={index} center={[track.lat, track.lng]} radius={5} color="black" fillColor="red" fillOpacity={1}>
+                        <Popup>{track.location}</Popup>
+                      </CircleMarker>
+                  ))}
 
-                  {tracks.map((track, index) => {
-                    if (index === tracks.length - 1) {
-                      return (
-                          <React.Fragment key={index}>
-                            <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
-                              <Popup>{track.dateAndTime}</Popup>
-                            </Marker>
+                  <Polyline positions={secondHalfTracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
+                  {secondHalfTracks.map((track, index) => (
+                      <React.Fragment key={index}>
+                        {index === secondHalfTracks.length - 1 ? (
+                            <>
+                              <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
+                                <Popup>{track.location}</Popup>
+                              </Marker>
+                              <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
+                                <Popup>{track.location}</Popup>
+                              </CircleMarker>
+                            </>
+                        ) : (
                             <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
-                              <Popup>{track.dateAndTime}</Popup>
+                              <Popup>{track.location}</Popup>
                             </CircleMarker>
-                          </React.Fragment>
-                      );
-                    } else {
-                      return (
-                          <CircleMarker key={index} center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
-                            <Popup>{track.dateAndTime}</Popup>
-                          </CircleMarker>
-                      );
-                    }
-                  })}
+                        )}
+                      </React.Fragment>
+                  ))}
                 </MapContainer>
             )}
           </div>
