@@ -36,7 +36,17 @@ const Track: React.FC = () => {
   }, []);
 
   const toggleTrack = () => {
-    setTracks(isAllTrack ? originalTracks.slice(-5) : originalTracks);
+    const today = new Date();
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const recentTracks = tracks.filter(track => {
+      const trackDate = new Date(track.dateAndTime);
+      return trackDate >= sevenDaysAgo;
+    });
+
+    setTracks(isAllTrack ? recentTracks : originalTracks);
     setIsAllTrack(!isAllTrack);
   };
 
@@ -71,17 +81,17 @@ const Track: React.FC = () => {
                       return (
                           <React.Fragment key={index}>
                             <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
-                              <Popup>{track.location}</Popup>
+                              <Popup>{track.dateAndTime}</Popup>
                             </Marker>
                             <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
-                              <Popup>{track.location}</Popup>
+                              <Popup>{track.dateAndTime}</Popup>
                             </CircleMarker>
                           </React.Fragment>
                       );
                     } else {
                       return (
                           <CircleMarker key={index} center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
-                            <Popup>{track.location}</Popup>
+                            <Popup>{track.dateAndTime}</Popup>
                           </CircleMarker>
                       );
                     }
