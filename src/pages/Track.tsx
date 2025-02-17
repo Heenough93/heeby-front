@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker } from 'react-leaflet';
 import L, {LatLngExpression} from "leaflet";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
+import TrackControls from "./TrackControls.tsx";
 import './Track.css';
 
 const CustomIcon = L.icon({
@@ -15,6 +16,7 @@ const Track: React.FC = () => {
   const [originalTracks, setOriginalTracks] = useState<any[]>([]);
   const [tracks, setTracks] = useState<any[]>([]);
   const [isAllTrack, setIsAllTrack] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchTracks = async () => {
     try {
@@ -37,12 +39,12 @@ const Track: React.FC = () => {
   const toggleTrack = () => {
     const today = new Date();
 
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(today.getDate() - 7);
+    const twoWeeksAgo = new Date();
+    twoWeeksAgo.setDate(today.getDate() - 14);
 
     const recentTracks = tracks.filter(track => {
       const trackDate = new Date(track.dateAndTime);
-      return trackDate >= sevenDaysAgo;
+      return trackDate >= twoWeeksAgo;
     });
 
     setTracks(isAllTrack ? recentTracks : originalTracks);
@@ -73,7 +75,7 @@ const Track: React.FC = () => {
           </div>
           <div className="track-map">
             {tracks.length !== 0 && (
-                <MapContainer center={[lastTrack.lat, lastTrack.lng] as LatLngExpression} zoom={4} style={{ height: "400px", width: "100%" }}>
+                <MapContainer center={[lastTrack.lat, lastTrack.lng] as LatLngExpression} zoom={8} style={{ height: "400px", width: "100%" }}>
                   <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -81,7 +83,19 @@ const Track: React.FC = () => {
 
                   <Polyline positions={firstHalfTracks.map(track => [track.lat, track.lng])} color="red" weight={4} />
                   {firstHalfTracks.map((track, index) => (
-                      <CircleMarker key={index} center={[track.lat, track.lng]} radius={5} color="black" fillColor="red" fillOpacity={1}>
+                      <CircleMarker
+                          key={index}
+                          center={[track.lat, track.lng]}
+                          radius={5}
+                          color="black"
+                          fillColor="red"
+                          fillOpacity={1}
+                          eventHandlers={{
+                            click: () => {
+                              setCurrentIndex(index)
+                            },
+                          }}
+                      >
                         <Popup>{track.location}</Popup>
                       </CircleMarker>
                   ))}
@@ -94,17 +108,40 @@ const Track: React.FC = () => {
                               <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
                                 <Popup>{track.location}</Popup>
                               </Marker>
-                              <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
+                              <CircleMarker
+                                  center={[track.lat, track.lng]}
+                                  radius={5}
+                                  color="black"
+                                  fillColor="yellow"
+                                  fillOpacity={1}
+                                  eventHandlers={{
+                                    click: () => {
+                                      setCurrentIndex(firstHalfTracks.length + index)
+                                    },
+                                  }}
+                              >
                                 <Popup>{track.location}</Popup>
                               </CircleMarker>
                             </>
                         ) : (
-                            <CircleMarker center={[track.lat, track.lng]} radius={5} color="black" fillColor="yellow" fillOpacity={1}>
+                            <CircleMarker
+                                center={[track.lat, track.lng]}
+                                radius={5}
+                                color="black"
+                                fillColor="yellow"
+                                fillOpacity={1}
+                                eventHandlers={{
+                                  click: () => {
+                                    setCurrentIndex(firstHalfTracks.length + index)
+                                  },
+                                }}
+                            >
                               <Popup>{track.location}</Popup>
                             </CircleMarker>
                         )}
                       </React.Fragment>
                   ))}
+                  <TrackControls tracks={tracks} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
                 </MapContainer>
             )}
           </div>
