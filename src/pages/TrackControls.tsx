@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useMap} from "react-leaflet";
 import L, {LatLngExpression} from "leaflet";
 
-const TrackControls: React.FC<{tracks: any[], currentIndex: number, setCurrentIndex: ((prev: number) => void)}> = ({tracks, currentIndex, setCurrentIndex}) => {
+const TrackControls: React.FC<{tracks: any[], currentIndex: number, setCurrentIndex: (value: (((prevState: number) => number) | number)) => void}> = ({tracks, currentIndex, setCurrentIndex}) => {
   const map = useMap();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const TrackControls: React.FC<{tracks: any[], currentIndex: number, setCurrentIn
           // map.flyTo([currentTrack.lat, currentTrack.lng] as LatLngExpression, 10);
           // map.openPopup(currentTrack.location, [currentTrack.lat, currentTrack.lng] as LatLngExpression);
 
-          setCurrentIndex((prev) => (prev !== 0 ? prev - 1 : prev));
+          setCurrentIndex((prev: number) => (prev !== 0 ? prev - 1 : prev));
         };
 
         const rightBtn = L.DomUtil.create('button', 'rightArrowButton', container);
@@ -51,7 +51,7 @@ const TrackControls: React.FC<{tracks: any[], currentIndex: number, setCurrentIn
           // map.flyTo([currentTrack.lat, currentTrack.lng] as LatLngExpression, 10);
           // map.openPopup(currentTrack.location, [currentTrack.lat, currentTrack.lng] as LatLngExpression);
 
-          setCurrentIndex((prev) => (prev !== tracks.length - 1 ? prev + 1 : prev));
+          setCurrentIndex((prev: number) => (prev !== tracks.length - 1 ? prev + 1 : prev));
         };
 
         return container;
