@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { HashRouter as Router, NavLink } from "react-router-dom";
 import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import AppRoutes from "./routes/AppRoutes.tsx";
 import { useLoading } from "./context/LoadingContext.tsx";
