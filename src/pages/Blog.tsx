@@ -35,7 +35,7 @@ const Blog: React.FC = () => {
         <h1 className="blog-heading">My Blog</h1>
         <div className="blog-posts">
           {isAuthenticated && (
-              <Link to="/new-post" className="add-post-link">
+              <Link to="/blog/new-post" className="add-post-link">
                 <article className="blog-post add-new-post">
                   <span className="add-post-icon">+</span>
                 </article>
@@ -44,7 +44,7 @@ const Blog: React.FC = () => {
           {posts.length > 0 && (
               posts.map((post) => (
                   <article key={post.id} className="blog-post">
-                    <Link to={`/post/${post.id}`} className="post-link">
+                    <Link to={`/blog/post/${post.id}`} className="post-link">
                       <h2 className="post-title">{post.title}</h2>
                       <p className="post-date">{
                         new Date(post.dateAndTime).toLocaleDateString('en-US', {

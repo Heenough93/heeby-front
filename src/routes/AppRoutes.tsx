@@ -9,8 +9,8 @@ const AppRoutes: React.FC = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/blog" element={<Blog />} />
-      <Route path="/post/:id" element={<PostDetail />} />
-      <Route path="/new-post" element={<NewPost />} />
+      <Route path="/blog/post/:id" element={<PostDetail />} />
+      <Route path="/blog/new-post" element={<NewPost />} />
       <Route path="/track" element={<Track />} />
     </Routes>
 );
