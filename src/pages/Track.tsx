@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Marker } from 'react-leaflet';
 import L, {LatLngExpression} from "leaflet";
+import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import TrackControls from "../components/TrackControls.tsx";
 import TrackListModal from "../components/TrackListModal.tsx";
@@ -13,6 +14,7 @@ const CustomIcon = L.icon({
 });
 
 const Track: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const fetchWithLoading = useFetchWithLoading();
   const [originalTracks, setOriginalTracks] = useState<any[]>([]);
   const [tracks, setTracks] = useState<any[]>([]);
@@ -148,9 +150,11 @@ const Track: React.FC = () => {
                   <TrackControls tracks={tracks} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
                 </MapContainer>
             )}
-            <button type="button" onClick={handleShowList} className="action-button show-list-button">
-              Show List
-            </button>
+            {isAuthenticated && (
+                <button type="button" onClick={handleShowList} className="action-button show-list-button">
+                  Show List
+                </button>
+            )}
             {isModalOpen && <TrackListModal tracks={tracks} onClose={() => setIsModalOpen(false)} />}
           </div>
         </div>
