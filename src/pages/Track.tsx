@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker } from 'react-leaflet';
 import L, {LatLngExpression} from "leaflet";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
-import TrackControls from "./TrackControls.tsx";
+import TrackControls from "../components/TrackControls.tsx";
+import TrackListModal from "../components/TrackListModal.tsx";
 import './Track.css';
 
 const CustomIcon = L.icon({
@@ -17,6 +18,7 @@ const Track: React.FC = () => {
   const [tracks, setTracks] = useState<any[]>([]);
   const [isAllTrack, setIsAllTrack] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchTracks = async () => {
     try {
@@ -36,6 +38,12 @@ const Track: React.FC = () => {
     fetchTracks();
   }, []);
 
+  useEffect(() => {
+    if (!isModalOpen) {
+      fetchTracks();
+    }
+  }, [isModalOpen]);
+
   const toggleTrack = () => {
     const today = new Date();
 
@@ -43,7 +51,7 @@ const Track: React.FC = () => {
     twoWeeksAgo.setDate(today.getDate() - 14);
 
     const recentTracks = tracks.filter(track => {
-      const trackDate = new Date(track.dateAndTime);
+      const trackDate = new Date(track.date);
       return trackDate >= twoWeeksAgo;
     });
 
@@ -51,11 +59,15 @@ const Track: React.FC = () => {
     setIsAllTrack(!isAllTrack);
   };
 
+  const handleShowList = () => {
+    setIsModalOpen(true);
+  }
+
   if (tracks.length === 0) return <p>Loading...</p>;
 
   const lastTrack = tracks[tracks.length - 1];
-  const firstHalfTracks = tracks.filter(track => new Date(track.dateAndTime) < new Date("2025-01-29"));
-  const secondHalfTracks = tracks.filter(track => new Date(track.dateAndTime) >= new Date("2025-01-29"));
+  const firstHalfTracks = tracks.filter(track => new Date(track.date) < new Date("2025-01-29"));
+  const secondHalfTracks = tracks.filter(track => new Date(track.date) >= new Date("2025-01-29"));
 
   return (
       <div className="track-container">
@@ -66,7 +78,7 @@ const Track: React.FC = () => {
         <div className="track-map-wrapper">
           <div className="header-with-toggle">
             <div className="title-with-toggle">
-              <h1 className="track-location">Current Location: {lastTrack.location}</h1>
+              <h1 className="track-location">Current Location: {lastTrack.city}</h1>
             </div>
 
             <button className="track-toggle-button" onClick={toggleTrack}>
@@ -95,9 +107,7 @@ const Track: React.FC = () => {
                               setCurrentIndex(index)
                             },
                           }}
-                      >
-                        <Popup>{track.location}</Popup>
-                      </CircleMarker>
+                      />
                   ))}
 
                   <Polyline positions={secondHalfTracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
@@ -105,9 +115,7 @@ const Track: React.FC = () => {
                       <React.Fragment key={index}>
                         {index === secondHalfTracks.length - 1 ? (
                             <>
-                              <Marker position={[track.lat, track.lng]} icon={CustomIcon}>
-                                <Popup>{track.location}</Popup>
-                              </Marker>
+                              <Marker position={[track.lat, track.lng]} icon={CustomIcon} />
                               <CircleMarker
                                   center={[track.lat, track.lng]}
                                   radius={5}
@@ -119,9 +127,7 @@ const Track: React.FC = () => {
                                       setCurrentIndex(firstHalfTracks.length + index)
                                     },
                                   }}
-                              >
-                                <Popup>{track.location}</Popup>
-                              </CircleMarker>
+                              />
                             </>
                         ) : (
                             <CircleMarker
@@ -135,15 +141,17 @@ const Track: React.FC = () => {
                                     setCurrentIndex(firstHalfTracks.length + index)
                                   },
                                 }}
-                            >
-                              <Popup>{track.location}</Popup>
-                            </CircleMarker>
+                            />
                         )}
                       </React.Fragment>
                   ))}
                   <TrackControls tracks={tracks} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
                 </MapContainer>
             )}
+            <button type="button" onClick={handleShowList} className="action-button show-list-button">
+              Show List
+            </button>
+            {isModalOpen && <TrackListModal tracks={tracks} onClose={() => setIsModalOpen(false)} />}
           </div>
         </div>
       </div>

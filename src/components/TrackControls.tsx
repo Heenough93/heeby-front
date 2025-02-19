@@ -14,10 +14,10 @@ const TrackControls: React.FC<{tracks: any[], currentIndex: number, setCurrentIn
     map.closePopup();
     map.flyTo([tracks[currentIndex].lat, tracks[currentIndex].lng] as LatLngExpression, 8);
     map.openPopup(
-        `${tracks[currentIndex].dateAndTime.slice(0, 10)}<br />${tracks[currentIndex].location}`,
+        `${tracks[currentIndex].date}<br />${tracks[currentIndex].city}, ${tracks[currentIndex].country}, ${tracks[currentIndex].flag}`,
         [tracks[currentIndex].lat, tracks[currentIndex].lng] as LatLngExpression
     );
-  }, [currentIndex]);
+  }, [tracks, currentIndex]);
 
   useEffect(() => {
     const customControl = L.Control.extend({
