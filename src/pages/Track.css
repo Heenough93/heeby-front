@@ -1,3 +1,7 @@
+.leaflet-top {
+    z-index: 500;
+}
+
 .track-container {
     padding: 20px;
     max-width: 1000px;
