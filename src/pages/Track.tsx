@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, CircleMarker, Marker } from 'react-leaflet';
 import L, {LatLngExpression} from "leaflet";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import TrackControls from "../components/TrackControls.tsx";

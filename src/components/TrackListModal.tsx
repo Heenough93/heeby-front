@@ -2,6 +2,16 @@ import React, {useEffect, useRef, useState} from "react";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import './TrackListModal.css';
 
+interface Track {
+  id: string;
+  date: string;
+  city: string;
+  country: string;
+  flag: string;
+  lat: number;
+  lng: number;
+}
+
 const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tracks, onClose }) => {
   const fetchWithLoading = useFetchWithLoading();
   const [trackData, setTrackData] = useState<Track[]>(tracks);
@@ -64,7 +74,7 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
     setEditingCell({ row: rowIndex, column });
   };
 
-  const handleCellChange = (rowIndex: number, column: keyof Track, value: string) => {
+  const handleCellChange = (rowIndex: number, column: keyof Track | "location", value: string) => {
     if (column !== "location") {
       const updatedTracks = [...trackData];
       updatedTracks[rowIndex] = { ...updatedTracks[rowIndex], [column]: value };
@@ -76,7 +86,7 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
     }
   };
 
-  const handleBlurOrEnter = (e: React.KeyboardEvent | React.FocusEvent, rowIndex: number, column: keyof Track) => {
+  const handleBlurOrEnter = (e: React.KeyboardEvent | React.FocusEvent) => {
     if ("key" in e && e.key !== "Enter") return;
     setEditingCell(null);
   };
@@ -144,18 +154,18 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
                                   <input
                                       type="text"
                                       value={track[column as keyof Track]}
-                                      onChange={(e) => handleCellChange(rowIndex, column as keyof Track, e.target.value)}
-                                      onBlur={(e) => handleBlurOrEnter(e, rowIndex, column as keyof Track)}
-                                      onKeyDown={(e) => handleBlurOrEnter(e, rowIndex, column as keyof Track)}
+                                      onChange={(e) => handleCellChange(rowIndex, column as keyof Track | "location", e.target.value)}
+                                      onBlur={(e) => handleBlurOrEnter(e)}
+                                      onKeyDown={(e) => handleBlurOrEnter(e)}
                                       autoFocus
                                   />
                               ) : (
                                   <input
                                       type="text"
                                       value={`${track["city"]}, ${track["country"]}, ${track["flag"]}`}
-                                      onChange={(e) => handleCellChange(rowIndex, column as keyof Track, e.target.value)}
-                                      onBlur={(e) => handleBlurOrEnter(e, rowIndex, column as keyof Track)}
-                                      onKeyDown={(e) => handleBlurOrEnter(e, rowIndex, column as keyof Track)}
+                                      onChange={(e) => handleCellChange(rowIndex, column as keyof Track | "location", e.target.value)}
+                                      onBlur={(e) => handleBlurOrEnter(e)}
+                                      onKeyDown={(e) => handleBlurOrEnter(e)}
                                       autoFocus
                                   />
                               )
