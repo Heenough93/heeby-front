@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 type AuthContextType = {
   isAuthenticated: boolean;
   user: any | null;
+  accessToken: string;
   login: (user: string) => void;
   logout: () => void;
 };
@@ -14,7 +15,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState("");
 
-  const login = (data) => {
+  const login = (data: any) => {
     setIsAuthenticated(true);
     setUser(data.user);
     setAccessToken(data.accessToken);

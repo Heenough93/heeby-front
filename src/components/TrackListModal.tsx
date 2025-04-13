@@ -56,11 +56,11 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
 
   const createTrack = async (track: Track) => {
     try {
-      delete track.id;
+      const { id, ...trackWithoutId } = track;
       await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/tracks/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
-        body: JSON.stringify(track),
+        body: JSON.stringify(trackWithoutId),
       });
       alert(`Track saved successfully!`);
       onClose();
