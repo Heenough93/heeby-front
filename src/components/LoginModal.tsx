@@ -16,12 +16,12 @@ const LoginModal: React.FC<Props> = ({closeLoginModal: closeLoginModal}: Props) 
 
   const handleLogin = async () => {
     try {
-      const data = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/auth/login", {
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/auth/login", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password }),
       });
-      login(data);
+      login(response.data);
       closeLoginModal();
     } catch (error) {
       alert("Fail to log in.");
