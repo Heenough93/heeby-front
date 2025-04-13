@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import './TrackListModal.css';
 
@@ -13,6 +14,7 @@ interface Track {
 }
 
 const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tracks, onClose }) => {
+  const {accessToken} = useAuth();
   const fetchWithLoading = useFetchWithLoading();
   const [trackData, setTrackData] = useState<Track[]>(tracks);
   const [editingCell, setEditingCell] = useState<{ row: number, column: string } | null>(null);
@@ -27,13 +29,12 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
 
   const updateTrack = async (track: Track) => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/track/modify-track", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: track }),
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/tracks/" + track.id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
+        body: JSON.stringify(track),
       });
-      const data = response.data;
-      alert(`${data}, Track updated successfully!`);
+      alert(`Track updated successfully!`);
       onClose();
     } catch (error) {
       alert("Fail to update track");
@@ -42,13 +43,11 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
 
   const deleteTrack = async (id: string) => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/track/remove-track", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: id }),
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/tracks/" + id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
       });
-      const data = response.data;
-      alert(`${data}, Track deleted successfully!`);
+      alert(`Track deleted successfully!`);
       onClose();
     } catch (error) {
       alert("Fail to delete track");
@@ -57,13 +56,13 @@ const TrackListModal: React.FC<{ tracks: Track[], onClose: () => void }> = ({ tr
 
   const createTrack = async (track: Track) => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/track/register-track", {
+      delete track.id;
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/tracks/", {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: track }),
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
+        body: JSON.stringify(track),
       });
-      const data = response.data;
-      alert(`${data}, Track saved successfully!`);
+      alert(`Track saved successfully!`);
       onClose();
     } catch (error) {
       alert("Fail to save track");

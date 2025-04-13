@@ -24,8 +24,9 @@ const Track: React.FC = () => {
 
   const fetchTracks = async () => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/track/find-tracks", {
-        method: 'POST',
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/tracks", {
+        method: 'GET',
+        cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
       });
       const data = response.data;
