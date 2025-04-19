@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext.tsx";
 import {useFetchWithLoading} from "../hooks/useFetchWithLoading.tsx";
 import NewPostMapView from "../components/NewPostMapView.tsx";
 import "./NewPost.css";
 
 const NewPost: React.FC = () => {
   const navigate = useNavigate();
-
+  const {accessToken, user} = useAuth();
   const fetchWithLoading = useFetchWithLoading();
   const [isPublic, setIsPublic] = useState(true);
   const [title, setTitle] = useState("");
@@ -23,22 +24,21 @@ const NewPost: React.FC = () => {
 
   const savePost = async () => {
     try {
-      const post = {
-        id: "0",
+      const postWithoutId = {
         dateAndTime: new Date().toISOString(),
         isPublic: isPublic,
         title: title,
         content: content,
         lat: location ? location.lat.toString() : "",
         lng: location ? location.lng.toString() : "",
+        userId: user.id,
       }
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/register-post", {
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/posts/", {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: post }),
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
+        body: JSON.stringify(postWithoutId),
       });
-      const data = response.data;
-      alert(`${data}, Post saved successfully!`);
+      alert(`Post saved successfully!`);
       navigate(-1);
     } catch (error) {
       alert("Fail to save post");

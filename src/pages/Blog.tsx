@@ -11,8 +11,9 @@ const Blog: React.FC = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/find-posts", {
-        method: 'POST',
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/posts", {
+        method: 'GET',
+        cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
       });
       const data = response.data;

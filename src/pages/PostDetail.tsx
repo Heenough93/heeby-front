@@ -9,7 +9,7 @@ const PostDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { isAuthenticated } = useAuth();
+  const { accessToken, isAuthenticated, user } = useAuth();
   const fetchWithLoading = useFetchWithLoading();
   const [isPublic, setIsPublic] = useState(true);
   const [title, setTitle] = useState("");
@@ -26,13 +26,12 @@ const PostDetail: React.FC = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/find-post-by-id", {
-        method: 'POST',
+      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/posts/" + id, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: id }),
       });
       const data = response.data;
-      setIsPublic(data.isPublic  === "true");
+      setIsPublic(data.isPublic);
       setTitle(data.title);
       setContent(data.content);
       setLocation({ lat: data.lat, lng: data.lng });
@@ -44,20 +43,20 @@ const PostDetail: React.FC = () => {
   const updatePost = async () => {
     try {
       const post = {
-        id: id,
+        id: Number(id),
         isPublic: isPublic,
         title: title,
         content: content,
         lat: location ? location.lat.toString() : "",
         lng: location ? location.lng.toString() : "",
+        userId: user.id,
       };
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/modify-post", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: post }),
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/posts/" + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
+        body: JSON.stringify(post),
       });
-      const data = response.data;
-      alert(`${data}, Post updated successfully!`);
+      alert(`Post updated successfully!`);
       navigate(-1);
     } catch (error) {
       alert("Fail to update post");
@@ -66,13 +65,11 @@ const PostDetail: React.FC = () => {
 
   const deletePost = async () => {
     try {
-      const response = await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/post/remove-post", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: id }),
+      await fetchWithLoading(import.meta.env.VITE_BASE_URL + "/posts/" + id, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'Authorization': accessToken },
       });
-      const data = response.data;
-      alert(`${data}, Post deleted successfully!`);
+      alert(`Post deleted successfully!`);
       navigate(-1);
     } catch (error) {
       alert("Fail to delete post");
