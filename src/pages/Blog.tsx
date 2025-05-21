@@ -20,7 +20,7 @@ const Blog: React.FC = () => {
       if (isAuthenticated) {
         setPosts(data.reverse());
       } else {
-        setPosts(data.reverse().filter((post: any) => post.isPublic === "true"));
+        setPosts(data.reverse().filter((post: any) => post.isPublic));
       }
     } catch (error) {
       alert("Fail to fetch blog posts.");
@@ -33,7 +33,7 @@ const Blog: React.FC = () => {
 
   return (
       <div className="blog-container">
-        <h1 className="blog-heading">My Blog</h1>
+        <h1 className="blog-heading">Blog</h1>
         <div className="blog-posts">
           {isAuthenticated && (
               <Link to="/blog/new-post" className="add-post-link">
