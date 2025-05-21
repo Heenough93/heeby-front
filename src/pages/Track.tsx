@@ -66,99 +66,95 @@ const Track: React.FC = () => {
     setIsModalOpen(true);
   }
 
-  if (tracks.length === 0) return <p>Loading...</p>;
-
   const lastTrack = tracks[tracks.length - 1];
   const firstHalfTracks = tracks.filter(track => new Date(track.date) < new Date("2025-01-29"));
   const secondHalfTracks = tracks.filter(track => new Date(track.date) >= new Date("2025-01-29"));
 
   return (
       <div className="track-container">
-        <header className="track-header">
-          <h1>Track</h1>
-        </header>
+        <h1 className="track-heading">Track</h1>
 
-        <div className="track-map-wrapper">
-          <div className="header-with-toggle">
-            <div className="title-with-toggle">
-              <h1 className="track-location">Current Location: {lastTrack.city}</h1>
-            </div>
+        {tracks.length !== 0 && (
+            <div className="track-map-wrapper">
+              <div className="header-with-toggle">
+                <div className="title-with-toggle">
+                  {/*<h1 className="track-location">Current Location: {lastTrack.city}</h1>*/}
+                </div>
 
-            <button className="track-toggle-button" onClick={toggleTrack}>
-              {isAllTrack ? 'Show Recent Tracks' : 'Show All Tracks'}
-            </button>
-          </div>
-          <div className="track-map">
-            {tracks.length !== 0 && (
-                <MapContainer center={[lastTrack.lat, lastTrack.lng] as LatLngExpression} zoom={8} style={{ height: "400px", width: "100%" }}>
-                  <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-
-                  <Polyline positions={firstHalfTracks.map(track => [track.lat, track.lng])} color="red" weight={4} />
-                  {firstHalfTracks.map((track, index) => (
-                      <CircleMarker
-                          key={index}
-                          center={[track.lat, track.lng]}
-                          radius={5}
-                          color="black"
-                          fillColor="red"
-                          fillOpacity={1}
-                          eventHandlers={{
-                            click: () => {
-                              setCurrentIndex(index)
-                            },
-                          }}
-                      />
-                  ))}
-
-                  <Polyline positions={secondHalfTracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
-                  {secondHalfTracks.map((track, index) => (
-                      <React.Fragment key={index}>
-                        {index === secondHalfTracks.length - 1 ? (
-                            <>
-                              <Marker position={[track.lat, track.lng]} icon={CustomIcon} />
-                              <CircleMarker
-                                  center={[track.lat, track.lng]}
-                                  radius={5}
-                                  color="black"
-                                  fillColor="yellow"
-                                  fillOpacity={1}
-                                  eventHandlers={{
-                                    click: () => {
-                                      setCurrentIndex(firstHalfTracks.length + index)
-                                    },
-                                  }}
-                              />
-                            </>
-                        ) : (
-                            <CircleMarker
-                                center={[track.lat, track.lng]}
-                                radius={5}
-                                color="black"
-                                fillColor="yellow"
-                                fillOpacity={1}
-                                eventHandlers={{
-                                  click: () => {
-                                    setCurrentIndex(firstHalfTracks.length + index)
-                                  },
-                                }}
-                            />
-                        )}
-                      </React.Fragment>
-                  ))}
-                  <TrackControls tracks={tracks} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-                </MapContainer>
-            )}
-            {isAuthenticated && (
-                <button type="button" onClick={handleShowList} className="action-button show-list-button">
-                  Show List
+                <button className="track-toggle-button" onClick={toggleTrack}>
+                  {isAllTrack ? 'Show Recent Tracks' : 'Show All Tracks'}
                 </button>
-            )}
-            {isModalOpen && <TrackListModal tracks={tracks} onClose={() => setIsModalOpen(false)} />}
-          </div>
-        </div>
+              </div>
+              <div className="track-map">
+                    <MapContainer center={[lastTrack.lat, lastTrack.lng] as LatLngExpression} zoom={8} style={{ height: "400px", width: "100%" }}>
+                      <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      />
+
+                      <Polyline positions={firstHalfTracks.map(track => [track.lat, track.lng])} color="red" weight={4} />
+                      {firstHalfTracks.map((track, index) => (
+                          <CircleMarker
+                              key={index}
+                              center={[track.lat, track.lng]}
+                              radius={5}
+                              color="black"
+                              fillColor="red"
+                              fillOpacity={1}
+                              eventHandlers={{
+                                click: () => {
+                                  setCurrentIndex(index)
+                                },
+                              }}
+                          />
+                      ))}
+
+                      <Polyline positions={secondHalfTracks.map(track => [track.lat, track.lng])} color="yellow" weight={4} />
+                      {secondHalfTracks.map((track, index) => (
+                          <React.Fragment key={index}>
+                            {index === secondHalfTracks.length - 1 ? (
+                                <>
+                                  <Marker position={[track.lat, track.lng]} icon={CustomIcon} />
+                                  <CircleMarker
+                                      center={[track.lat, track.lng]}
+                                      radius={5}
+                                      color="black"
+                                      fillColor="yellow"
+                                      fillOpacity={1}
+                                      eventHandlers={{
+                                        click: () => {
+                                          setCurrentIndex(firstHalfTracks.length + index)
+                                        },
+                                      }}
+                                  />
+                                </>
+                            ) : (
+                                <CircleMarker
+                                    center={[track.lat, track.lng]}
+                                    radius={5}
+                                    color="black"
+                                    fillColor="yellow"
+                                    fillOpacity={1}
+                                    eventHandlers={{
+                                      click: () => {
+                                        setCurrentIndex(firstHalfTracks.length + index)
+                                      },
+                                    }}
+                                />
+                            )}
+                          </React.Fragment>
+                      ))}
+                      <TrackControls tracks={tracks} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+                    </MapContainer>
+                {isAuthenticated && (
+                    <button type="button" onClick={handleShowList} className="action-button show-list-button">
+                      Show List
+                    </button>
+                )}
+                {isModalOpen && <TrackListModal tracks={tracks} onClose={() => setIsModalOpen(false)} />}
+              </div>
+            </div>
+        )}
       </div>
   );
 };
