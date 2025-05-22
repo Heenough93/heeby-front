@@ -78,7 +78,7 @@ const Track: React.FC = () => {
             <div className="track-map-wrapper">
               <div className="header-with-toggle">
                 <div className="title-with-toggle">
-                  {/*<h1 className="track-location">Current Location: {lastTrack.city}</h1>*/}
+                  <h1 className="track-location">Current Location: {lastTrack.city}</h1>
                 </div>
 
                 <button className="track-toggle-button" onClick={toggleTrack}>
